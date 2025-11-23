@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2048 Game Player - RL Demo</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="subpage-container">
+        <a href="index.html" class="back-btn">← Back to Home</a>
+
+        <header>
+            <h1> 2048 Game Player</h1>
+            <p class="subtitle">Master the 2048 game using deep reinforcement learning</p>
+        </header>
+
+        <div class="algorithm-tabs">
+            <button class="tab-btn active" onclick="switchAlgorithm('qlearning')">Q-Learning</button>
+            <button class="tab-btn" onclick="switchAlgorithm('sarsa')">SARSA</button>
+            <button class="tab-btn" onclick="switchAlgorithm('montecarlo')">Monte Carlo</button>
+            <button class="tab-btn" onclick="switchAlgorithm('dqn')">DQN</button>
+        </div>
+
+        <div class="content-wrapper">
+            <div class="main-content">
+                <div class="controls">
+                    <button class="control-btn" id="trainBtn" onclick="startTraining()">Start Training</button>
+                    <button class="control-btn stop" id="stopBtn" onclick="stopTraining()" disabled>Stop</button>
+                    <button class="control-btn reset" onclick="resetEnvironment()">Reset</button>
+                    <button class="control-btn" onclick="runEpisode()">Play Game</button>
+                </div>
+
+                <div class="slider-control">
+                    <label for="speedSlider">Speed: <span id="speedValue">100</span> ms/move</label>
+                    <input type="range" id="speedSlider" min="10" max="500" value="100" oninput="updateSpeed(this.value)">
+                </div>
+
+                <div class="canvas-container">
+                    <canvas id="environment-canvas" width="600" height="600"></canvas>
+                </div>
+
+                <div id="qlearning-content" class="tab-content active">
+                    <div class="algorithm-description">
+                        <h4>Q-Learning for 2048</h4>
+                        <p>Struggles with the massive state space of 2048. Performs basic moves but doesn't develop advanced strategies.</p>
+                        <p><strong>Limitation:</strong> State space too large for tabular methods</p>
+                    </div>
+                </div>
+
+                <div id="sarsa-content" class="tab-content">
+                    <div class="algorithm-description">
+                        <h4>SARSA for 2048</h4>
+                        <p>Similar challenges to Q-Learning. More conservative play style but limited by state space.</p>
+                        <p><strong>Performance:</strong> Slightly better than random play</p>
+                    </div>
+                </div>
+
+                <div id="montecarlo-content" class="tab-content">
+                    <div class="algorithm-description">
+                        <h4>Monte Carlo for 2048</h4>
+                        <p>Episode-based learning from complete games. Can learn strategic sequences better than TD methods.</p>
+                        <p><strong>Advantage:</strong> Evaluates long-term consequences of moves</p>
+                    </div>
+                </div>
+
+                <div id="dqn-content" class="tab-content">
+                    <div class="algorithm-description">
+                        <h4>Deep Q-Network for 2048</h4>
+                        <p>Best performer! Uses neural network approximation to handle complex board states. Learns strategic tile placement and merge sequences.</p>
+                        <p><strong>Achievement:</strong> Can reach 1024+ tiles with training</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="info-panel">
+                    <h3>Game Statistics</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-label">Episode</div>
+                            <div class="stat-value" id="episode">0</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Score</div>
+                            <div class="stat-value" id="score">0</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Max Tile</div>
+                            <div class="stat-value" id="maxTile">2</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Moves</div>
+                            <div class="stat-value" id="moves">0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-panel">
+                    <h3>Score per Episode</h3>
+                    <div class="chart-container">
+                        <canvas id="scoreChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="info-panel">
+                    <h3>Max Tile Achieved</h3>
+                    <div class="chart-container">
+                        <canvas id="tileChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="rl_models/q_learning.js"></script>
+    <script src="rl_models/sarsa.js"></script>
+    <script src="rl_models/monte_carlo.js"></script>
+    <script src="rl_models/dqn.js"></script>
+    <script src="game_controller.js"></script>
+</body>
+</html>

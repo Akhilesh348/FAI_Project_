@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recycling Separator - RL Demo</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="subpage-container">
+        <a href="index.html" class="back-btn">← Back to Home</a>
+
+        <header>
+            <h1> Recycling Separator (Waste Sorting Puzzle)</h1>
+            <p class="subtitle">Sort paper, plastic, and metal into pure bins using strategic moves</p>
+        </header>
+
+        <div class="algorithm-tabs">
+            <button class="tab-btn active" onclick="switchAlgorithm('qlearning')">Q-Learning</button>
+            <button class="tab-btn" onclick="switchAlgorithm('sarsa')">SARSA</button>
+            <button class="tab-btn" onclick="switchAlgorithm('montecarlo')">Monte Carlo</button>
+            <button class="tab-btn" onclick="switchAlgorithm('dqn')">DQN</button>
+        </div>
+
+        <div class="content-wrapper">
+            <div class="main-content">
+                <div class="controls">
+                    <button class="control-btn" id="trainBtn" onclick="startTraining()">Start Training</button>
+                    <button class="control-btn stop" id="stopBtn" onclick="stopTraining()" disabled>Stop</button>
+                    <button class="control-btn reset" onclick="resetEnvironment()">Reset</button>
+                </div>
+
+                <div class="slider-control">
+                    <label for="speedSlider">Speed: <span id="speedValue">50</span> ms/step</label>
+                    <input type="range" id="speedSlider" min="10" max="200" value="50" oninput="updateSpeed(this.value)">
+                </div>
+
+                <div class="canvas-container">
+                    <canvas id="environment-canvas" width="900" height="500"></canvas>
+                </div>
+
+                <div id="qlearning-content" class="tab-content active">
+                    <div class="algorithm-description">
+                        <h4>Q-Learning Algorithm</h4>
+                        <p>Off-policy TD control learning optimal sorting sequences. 
+                        Discovers which moves lead to sorted bins most efficiently.</p>
+                        <p><strong>Challenge:</strong> Learn to use empty bins strategically for temporary storage</p>
+                    </div>
+                </div>
+
+                <div id="sarsa-content" class="tab-content">
+                    <div class="algorithm-description">
+                        <h4>SARSA Algorithm</h4>
+                        <p>On-policy TD control learning cautious sorting strategies. 
+                        Avoids getting stuck by considering current policy.</p>
+                        <p><strong>Focus:</strong> Safe moves that don't create unsortable situations</p>
+                    </div>
+                </div>
+
+                <div id="montecarlo-content" class="tab-content">
+                    <div class="algorithm-description">
+                        <h4>Monte Carlo Algorithm</h4>
+                        <p>Episode-based learning evaluating complete sorting sequences. 
+                        Learns from entire solutions without intermediate updates.</p>
+                        <p><strong>Strength:</strong> Understanding full sorting strategies</p>
+                    </div>
+                </div>
+
+                <div id="dqn-content" class="tab-content">
+                    <div class="algorithm-description">
+                        <h4>Deep Q-Network (DQN)</h4>
+                        <p>Neural network approximation handling complex bin configurations. 
+                        Generalizes sorting patterns across different initial states.</p>
+                        <p><strong>Key Innovation:</strong> Scales to larger bin counts and items</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="info-panel">
+                    <h3>Training Statistics</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-label">Episode</div>
+                            <div class="stat-value" id="episode">0</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Total Reward</div>
+                            <div class="stat-value" id="reward">0</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Moves</div>
+                            <div class="stat-value" id="moves">0</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Success Rate</div>
+                            <div class="stat-value" id="success">0%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-panel">
+                    <h3>Reward per Episode</h3>
+                    <div class="chart-container">
+                        <canvas id="rewardChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="info-panel">
+                    <h3>Moves to Sort</h3>
+                    <div class="chart-container">
+                        <canvas id="movesChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="rl_models/q_learning.js"></script>
+    <script src="rl_models/sarsa.js"></script>
+    <script src="rl_models/monte_carlo.js"></script>
+    <script src="rl_models/dqn.js"></script>
+    <script src="recycling_controller.js"></script>
+</body>
+</html>

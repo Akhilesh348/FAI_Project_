@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warehouse Picker - RL Demo</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="subpage-container">
+        <a href="index.html" class="back-btn">← Back to Home</a>
+
+        <header>
+            <h1>🤖 Warehouse Picker Robot</h1>
+            <p class="subtitle">Optimize item picking and delivery routes</p>
+        </header>
+
+        <div class="algorithm-tabs">
+            <button class="tab-btn active" onclick="switchAlgorithm('qlearning')">Q-Learning</button>
+            <button class="tab-btn" onclick="switchAlgorithm('sarsa')">SARSA</button>
+            <button class="tab-btn" onclick="switchAlgorithm('montecarlo')">Monte Carlo</button>
+            <button class="tab-btn" onclick="switchAlgorithm('dqn')">DQN</button>
+        </div>
+
+        <div class="content-wrapper">
+            <div class="main-content">
+                <div class="controls">
+                    <button class="control-btn" id="trainBtn" onclick="startTraining()">Start Training</button>
+                    <button class="control-btn stop" id="stopBtn" onclick="stopTraining()" disabled>Stop</button>
+                    <button class="control-btn reset" onclick="resetEnvironment()">Reset</button>
+                    <button class="control-btn" onclick="runEpisode()">Run Episode</button>
+                </div>
+
+                <div class="slider-control">
+                    <label for="speedSlider">Speed: <span id="speedValue">35</span> ms/step</label>
+                    <input type="range" id="speedSlider" min="10" max="200" value="35" oninput="updateSpeed(this.value)">
+                </div>
+
+                <div class="canvas-container">
+                    <canvas id="environment-canvas" width="600" height="600"></canvas>
+                </div>
+
+                <div id="qlearning-content" class="tab-content active">
+                    <div class="algorithm-description">
+                        <h4>Q-Learning for Warehouse Navigation</h4>
+                        <p>Learns to pick and deliver items efficiently. Converges slower but reliable for simple layouts.</p>
+                        <p><strong>Reward:</strong> +10 per item delivered, -0.1 per step</p>
+                    </div>
+                </div>
+
+                <div id="sarsa-content" class="tab-content">
+                    <div class="algorithm-description">
+                        <h4>SARSA for Warehouse Tasks</h4>
+                        <p>On-policy learning adapts to actual movement patterns. More realistic for real-world deployment.</p>
+                        <p><strong>Behavior:</strong> Conservative routing strategies</p>
+                    </div>
+                </div>
+
+                <div id="montecarlo-content" class="tab-content">
+                    <div class="algorithm-description">
+                        <h4>Monte Carlo for Warehouse</h4>
+                        <p>Evaluates complete task sequences. Learns optimal pickup order by analyzing full episodes.</p>
+                        <p><strong>Strength:</strong> Global optimization of task sequences</p>
+                    </div>
+                </div>
+
+                <div id="dqn-content" class="tab-content">
+                    <div class="algorithm-description">
+                        <h4>DQN for Complex Warehouses</h4>
+                        <p>Excels at optimizing pickup order and route planning. Handles multiple items efficiently.</p>
+                        <p><strong>Performance:</strong> Best for multi-item scenarios</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="info-panel">
+                    <h3>Warehouse Statistics</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-label">Episode</div>
+                            <div class="stat-value" id="episode">0</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Items Delivered</div>
+                            <div class="stat-value" id="delivered">0</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Steps</div>
+                            <div class="stat-value" id="steps">0</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Efficiency</div>
+                            <div class="stat-value" id="efficiency">0%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-panel">
+                    <h3>Items Delivered per Episode</h3>
+                    <div class="chart-container">
+                        <canvas id="itemsChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="info-panel">
+                    <h3>Average Steps per Delivery</h3>
+                    <div class="chart-container">
+                        <canvas id="efficiencyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="rl_models/q_learning.js"></script>
+    <script src="rl_models/sarsa.js"></script>
+    <script src="rl_models/monte_carlo.js"></script>
+    <script src="rl_models/dqn.js"></script>
+    <script src="warehouse_controller.js"></script>
+</body>
+</html>

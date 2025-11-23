@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maze Navigation - RL Demo</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="subpage-container">
+        <a href="index.html" class="back-btn">← Back to Home</a>
+
+        <header>
+            <h1> Maze Navigation (GridWorld Pathfinding)</h1>
+            <p class="subtitle">Compare how different RL algorithms learn to navigate through mazes</p>
+        </header>
+
+        <div class="algorithm-tabs">
+            <button class="tab-btn active" onclick="switchAlgorithm('qlearning')">Q-Learning</button>
+            <button class="tab-btn" onclick="switchAlgorithm('sarsa')">SARSA</button>
+            <button class="tab-btn" onclick="switchAlgorithm('montecarlo')">Monte Carlo</button>
+            <button class="tab-btn" onclick="switchAlgorithm('dqn')">DQN</button>
+        </div>
+
+        <div class="content-wrapper">
+            <div class="main-content">
+                <div class="controls">
+                    <button class="control-btn" id="trainBtn" onclick="startTraining()">Start Training</button>
+                    <button class="control-btn stop" id="stopBtn" onclick="stopTraining()" disabled>Stop</button>
+                    <button class="control-btn reset" onclick="resetEnvironment()">Reset</button>
+                    <button class="control-btn" id="showPathBtn" onclick="showLearnedPath()" disabled>Show Learned Path</button>
+                </div>
+
+                <div class="slider-control">
+                    <label for="speedSlider">Speed: <span id="speedValue">50</span> ms/step</label>
+                    <input type="range" id="speedSlider" min="10" max="200" value="50" oninput="updateSpeed(this.value)">
+                </div>
+
+                <div class="canvas-container">
+                    <canvas id="environment-canvas" width="600" height="600"></canvas>
+                </div>
+
+                <div id="qlearning-content" class="tab-content active">
+                    <div class="algorithm-description">
+                        <h4>Q-Learning Algorithm</h4>
+                        <p>Off-policy TD control algorithm that learns the optimal action-value function Q*(s,a). 
+                        It explores quickly and converges stably, making it ideal for grid-based navigation.</p>
+                        <p><strong>Update Rule:</strong> Q(s,a) ← Q(s,a) + α[r + γ max Q(s',a') - Q(s,a)]</p>
+                    </div>
+                </div>
+
+                <div id="sarsa-content" class="tab-content">
+                    <div class="algorithm-description">
+                        <h4>SARSA Algorithm</h4>
+                        <p>On-policy TD control algorithm that learns the value of the policy being followed. 
+                        It tends to learn more cautious policies as it considers the action it will actually take.</p>
+                        <p><strong>Update Rule:</strong> Q(s,a) ← Q(s,a) + α[r + γ Q(s',a') - Q(s,a)]</p>
+                    </div>
+                </div>
+
+                <div id="montecarlo-content" class="tab-content">
+                    <div class="algorithm-description">
+                        <h4>Monte Carlo Algorithm</h4>
+                        <p>Episode-based learning that updates Q-values using complete episode returns. 
+                        No bootstrapping - learns from actual outcomes. Better for episodic tasks.</p>
+                        <p><strong>Update Rule:</strong> Q(s,a) ← average of returns following (s,a)</p>
+                        <p><strong>Advantage:</strong> No bias, learns from complete trajectories</p>
+                    </div>
+                </div>
+
+                <div id="dqn-content" class="tab-content">
+                    <div class="algorithm-description">
+                        <h4>Deep Q-Network (DQN)</h4>
+                        <p>Uses a neural network to approximate Q-values, allowing it to handle larger state spaces. 
+                        Employs experience replay and target networks for stable learning.</p>
+                        <p><strong>Key Innovation:</strong> Function approximation with deep learning</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="info-panel">
+                    <h3>Training Statistics</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-label">Episode</div>
+                            <div class="stat-value" id="episode">0</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Total Reward</div>
+                            <div class="stat-value" id="reward">0</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Steps</div>
+                            <div class="stat-value" id="steps">0</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Success Rate</div>
+                            <div class="stat-value" id="success">0%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-panel">
+                    <h3>Reward per Episode</h3>
+                    <div class="chart-container">
+                        <canvas id="rewardChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="info-panel">
+                    <h3>Steps to Goal</h3>
+                    <div class="chart-container">
+                        <canvas id="stepsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="rl_models/q_learning.js"></script>
+    <script src="rl_models/sarsa.js"></script>
+    <script src="rl_models/monte_carlo.js"></script>
+    <script src="rl_models/dqn.js"></script>
+    <script src="maze_controller.js"></script>
+</body>
+</html>
